@@ -3,16 +3,21 @@ import cors from "cors";
 import dotenv from "dotenv";
 import sql from "./config/db.js";
 import transactionRoutes from "./routes/transactionRoute.js";
+import rateLimiter from "./middlewares/rateLimiter.js";
 dotenv.config();
 
 const app = express();
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(rateLimiter);
+
+// Routes
 app.use('/api/v1/transactions', transactionRoutes);
 
 app.get("/health", (req, res) => {
-  res.send("Hello World");
+  res.send("Wallet API is running");
 });
 
 async function initDB() {
